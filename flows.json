@@ -1,0 +1,49 @@
+[
+    {
+        "id": "f690392010d5a186",
+        "type": "ui_gauge",
+        "z": "32c824b2d5e01ca8",
+        "name": "",
+        "group": "40fa442beb9bb8ac",
+        "order": 0,
+        "width": 0,
+        "height": 0,
+        "gtype": "gage",
+        "title": "Total Energy",
+        "label": "units",
+        "format": "{{msg.payload.totalEnergy}} KW/H",
+        "min": 0,
+        "max": "5000",
+        "colors": [
+            "#00b500",
+            "#e6e600",
+            "#ca3838"
+        ],
+        "seg1": "",
+        "seg2": "",
+        "diff": false,
+        "className": "",
+        "x": 1270,
+        "y": 280,
+        "wires": []
+    },
+    {
+        "id": "40fa442beb9bb8ac",
+        "type": "ui_group",
+        "name": "",
+        "tab": "227c31afdbd5e55f",
+        "order": 1,
+        "disp": true,
+        "width": "10",
+        "collapse": false,
+        "className": ""
+    },
+    {
+        "id": "227c31afdbd5e55f",
+        "type": "ui_tab",
+        "name": "Create energy consumption",
+        "icon": "dashboard",
+        "disabled": false,
+        "hidden": false
+    }
+]
