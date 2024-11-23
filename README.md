@@ -11,7 +11,7 @@ Os dados gerados pelo simulador podem ser integrados ao sistema completo, propor
 1. **Simulação do Circuito:**
    - Desenvolvido no Wokwi, utilizando um microcontrolador e um potenciômetro para medir e simular o consumo energético.
 
-2. **Node-RED (Opcional):**
+2. **Node-RED :**
    - Utilizado para criar fluxos de dados e realizar integrações.
 
 3. **Código-fonte:**
