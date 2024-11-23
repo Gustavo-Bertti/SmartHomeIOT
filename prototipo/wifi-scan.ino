@@ -1,7 +1,7 @@
 #include <Arduino.h>
 #include <driver/adc.h>
 #include <WiFi.h>
-#include <PubSubClient.h>  
+#include <PubSubClient.h>
 
 const int potPin = 34;  
 const int ledPin = 26;  
@@ -16,6 +16,7 @@ PubSubClient client(espClient);
 float energiaConsumida = 0;  
 unsigned long ultimoTempo = 0;
 
+const unsigned long INTERVALO_MEDICAO = 3600000;  
 void setupWiFi() {
   Serial.print("Conectando no Wi-Fi");
   WiFi.begin(ssid, password);
@@ -66,39 +67,41 @@ void loop() {
   }
   client.loop();  
 
-  delay(1000);  
-
-  int valorPot = analogRead(potPin);
-  Serial.print("Leitura do potenciômetro: ");
-  Serial.println(valorPot);  
-  
-  if (valorPot == 0) {
-    Serial.println("Aviso: Leitura do potenciômetro é zero! Verifique as conexões.");
-    return;
-  }
-
-  float maxValorPot = 4095.0; 
-  float maxConsumo = 30.0;    
-  float percentual = valorPot / maxValorPot; 
-  float taxaConsumo = percentual * maxConsumo;    
-
   unsigned long tempoAtual = millis();
-  float tempoDecorrido = (tempoAtual - ultimoTempo) / 1000.0;  
+  
+  
+  if (tempoAtual - ultimoTempo >= INTERVALO_MEDICAO) {
+    int valorPot = analogRead(potPin);
+    Serial.print("Leitura do potenciômetro: ");
+    Serial.println(valorPot);  
+    
+    if (valorPot == 0) {
+      Serial.println("Aviso: Leitura do potenciômetro é zero! Verifique as conexões.");
+      return;
+    }
 
-  energiaConsumida += taxaConsumo * tempoDecorrido;
-  ultimoTempo = tempoAtual;
+    float maxValorPot = 4095.0; 
+    float maxConsumo = 30.0;    
+    float percentual = valorPot / maxValorPot; 
+    float taxaConsumo = percentual * maxConsumo;    
 
-  // JSON payload atualizado com informações do usuário
-  String payload = String("{\"totalEnergy\":") + energiaConsumida +
-                   String(",\"user\":{\"userId\":0,\"name\":\"string\",\"email\":\"string\",\"password\":\"stringst\",\"createdAt\":\"2024-11-21\"}}");
+    float tempoDecorrido = INTERVALO_MEDICAO / 1000.0;  
 
-  client.publish("energia/consumo", payload.c_str());  
+    energiaConsumida += taxaConsumo * (tempoDecorrido / 3600);  
+    ultimoTempo = tempoAtual;
 
-  // Piscar o LED após enviar uma mensagem
-  piscarLed();
+    
+    String payload = String("{\"totalEnergy\":") + energiaConsumida +
+                     String(",\"user\":{\"userId\":0,\"name\":\"string\",\"email\":\"string\",\"password\":\"stringst\",\"createdAt\":\"2024-11-21\"}}");
 
-  Serial.print("Total Energy: ");
-  Serial.print(energiaConsumida, 1);  
-  Serial.println(" kWh | Payload enviado:");
-  Serial.println(payload);
+    client.publish("energia/consumo", payload.c_str());  
+
+    
+    piscarLed();
+
+    Serial.print("Total Energy: ");
+    Serial.print(energiaConsumida, 1);  
+    Serial.println(" kWh | Payload enviado:");
+    Serial.println(payload);
+  }
 }
