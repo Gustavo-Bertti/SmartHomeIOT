@@ -1,5 +1,6 @@
 # SmartHome IoT
-
+## Link do video
+- https://www.youtube.com/watch?v=0kfSysyUzLA
 ## Descrição do Projeto
 
 Este repositório contém a parte de **Internet das Coisas (IoT)** do projeto **SmartHome**, cujo objetivo principal é monitorar o consumo de energia residencial. O sistema utiliza um circuito eletrônico simulado, desenvolvido no **Wokwi**, para medir o consumo energético em kWh.
